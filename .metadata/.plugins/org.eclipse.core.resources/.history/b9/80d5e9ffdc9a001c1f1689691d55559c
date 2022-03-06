@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 组件扫描 -->
+	<context:component-scan base-package="com.hssj">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- 加载配置文件 -->
+	<context:property-placeholder
+		location="classpath:druid.properties" local-override="true" />
+
+	<!-- 配置数据源信息 -->
+	<bean id="dataSource"
+		class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${driverClassName}"></property>
+		<property name="url" value="${url}"></property>
+		<property name="username" value="${username}"></property>
+		<property name="password" value="${password}"></property>
+	</bean>
+
+	<!-- pagehelper -->
+
+	<bean id="pageHelper" class="com.github.pagehelper.PageHelper">
+		<property name="properties">
+			<props>
+				<prop key="helperDialect">mysql</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<!-- 加载sqlSessionFactory -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation"
+			value="classpath:/mybatis-config.xml"></property>
+		<property name="plugins" ref="pageHelper"></property>
+	</bean>
+
+	<!-- 扫描mybatis的映射文件 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.hssj.mapper"></property>
+	</bean>
+
+	<!-- 声明式事务控制 -->
+	<!-- 平台事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+
+	<!-- 配置切面属性增强(通知) -->
+
+	<!-- <tx:advice id="txAdvice" transaction-manager="transactionManager"> 
+		<tx:attributes> <tx:method name="*" /> </tx:attributes> </tx:advice> 织入 <aop:config> 
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.hssj.service.impl.*.*(..))" 
+		/> </aop:config> -->
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+</beans>

@@ -1,0 +1,54 @@
+package com.xyz.hssj.web.servlet;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xyz.hssj.domain.Category;
+import com.xyz.hssj.domain.Link;
+import com.xyz.hssj.domain.LinkHead;
+import com.xyz.hssj.service.CategoryService;
+import com.xyz.hssj.service.impl.CategoryServiceImpl;
+
+/**
+ * Servlet implementation class CategoryServlet
+ */
+@WebServlet("/category/*")
+public class CategoryServlet extends BaseServlet {
+	private static final long serialVersionUID = 1L;
+	private CategoryService categoryService = new CategoryServiceImpl();
+	private ObjectMapper mapper = new ObjectMapper();
+
+	// 商城分类
+	public void findAll(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 1获取分类
+		List<Category> cs = categoryService.findAll();
+		// 2序列化json返回
+		mapper.writeValue(response.getOutputStream(), cs);
+	}
+
+	// 商品分类
+	public void findLink(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// 1获取前端传输数据
+		int cid = Integer.parseInt(request.getParameter("cid"));
+		// 2通过cid获取相应物品的分类
+		List<Link> lk = categoryService.findLink(cid);
+		// 3将数据序列化为json返回
+		mapper.writeValue(response.getOutputStream(), lk);
+	}
+	public void findLinkHead(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// 1获取前端传输数据
+		int cid = Integer.parseInt(request.getParameter("cid"));
+		// 2通过cid获取相应物品的分类
+		List<LinkHead> lk = categoryService.findLinkHead(cid);
+		// 3将数据序列化为json返回
+		mapper.writeValue(response.getOutputStream(), lk);
+	}
+}

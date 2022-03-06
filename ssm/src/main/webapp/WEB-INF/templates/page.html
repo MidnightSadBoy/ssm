@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>goods</title>
+    <link rel="stylesheet" href="../../css/goods.css">
+    <script src="../../js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../css/index.css">
+    <!-- 引入组件库 -->
+    <script src="../../js/index.js"></script>
+    <script src="../../js/axios.min.js"></script>
+
+</head>
+
+<body class="rainbow">
+    <div id="app">
+        <el-menu class="el-menu-vertical-demo" @select="choice">
+            <el-menu-item :index="index.toString()" v-for="(item, index) in 4" :key="index">
+                <i class="el-icon-menu"></i>
+                <span slot="title">导航二</span>
+            </el-menu-item>
+            
+        </el-menu>
+        <el-menu class="el-menu-vertical-demo" @select="handleSelect">
+            <el-menu-item index="2">
+                <i class="el-icon-menu"></i>
+                <span slot="title">导航二</span>
+            </el-menu-item>
+            <el-menu-item index="3" disabled>
+                <i class="el-icon-document"></i>
+                <span slot="title">导航三</span>
+            </el-menu-item>
+            <el-menu-item index="4">
+                <i class="el-icon-setting"></i>
+                <span slot="title">导航四</span>
+            </el-menu-item>
+        </el-menu>
+    </div>
+</body>
+<script src="../../js/2.js"></script>
+
+</html>

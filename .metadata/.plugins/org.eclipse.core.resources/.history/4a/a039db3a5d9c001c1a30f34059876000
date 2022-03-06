@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan
+		base-package="com.hssj.controller" />
+
+	<mvc:view-controller path="/" view-name="index" />
+	<mvc:view-controller path="/toIndex"
+		view-name="redirect:/" />
+	<mvc:view-controller path="/toLogin"
+		view-name="login" />
+	<mvc:view-controller path="/toRegister"
+		view-name="register" />
+	<mvc:view-controller path="/toGoods_list"
+		view-name="goods_list" />
+	<mvc:view-controller path="/toRegisterSuccess"
+		view-name="register_success" />
+
+	<bean id="viewResolver"
+		class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+		<property name="order" value="1" />
+		<property name="characterEncoding" value="UTF-8" />
+		<property name="templateEngine">
+			<bean class="org.thymeleaf.spring5.SpringTemplateEngine">
+				<property name="templateResolver">
+					<bean
+						class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+
+						<!-- 视图前缀 -->
+						<property name="prefix" value="WEB-INF/templates/" />
+
+						<!-- 视图后缀 -->
+						<property name="suffix" value=".html" />
+						<property name="templateMode" value="HTML" />
+						<property name="characterEncoding" value="UTF-8" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<mvc:default-servlet-handler />
+	<mvc:annotation-driven />
+
+	<!-- 配置拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/" />
+			<!-- <mvc:exclude-mapping path="/toIndex" /> -->
+			<!-- <mvc:exclude-mapping path="/toLogin" /> -->
+			<!-- <mvc:exclude-mapping path="/toRegister" /> -->
+			<bean class="com.hssj.interceptor.LoginIntercepetor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+</beans>

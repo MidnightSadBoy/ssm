@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>goods</title>
+    <link rel="stylesheet" href="css/goods.css">
+    <script src="js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 引入组件库 -->
+    <script src="js/index.js"></script>
+    <script src="js/axios.min.js"></script>
+
+</head>
+
+<body class="rainbow">
+    <div id="app" class="background">
+        <el-menu class="el-menu-demo" text-color="#000" mode="horizontal" @select="handleSelect">
+            <el-menu-item style="font-size: large;">亨盛世家</el-menu-item>
+        </el-menu>
+        <el-row style="margin-bottom: 6%;margin-top: 3%;">
+            <el-col :span="8" :offset="8">
+                <el-input  @keyup.native.enter="findByName" v-model="name" placeholder="请输入内容">
+                    <el-button @click="findByName" slot="append" icon="el-icon-search"></el-button>
+                </el-input>
+            </el-col>
+        </el-row>
+        <el-row v-for="(item, index) in head" :key="index">
+            <el-col style="text-align: right;padding-top: 8px;" :span="4">
+                {{item.lhname}}
+            </el-col>
+            <el-col style="margin-bottom: 1%;" :span="20">
+                <el-radio-group @change="choice" v-model="links[index]">
+                    <el-radio-button :label="ite.lid" v-for="(ite, inde) in category" :key="inde"
+                        v-if="ite.lrow==index+1">{{ite.lname}}</el-radio-button>
+                </el-radio-group>
+            </el-col>
+        </el-row>
+        <el-row style="padding-left: 4%; margin-top: 3%;" v-for="index in 2" :key="index+'-'">
+            <el-col style="margin-bottom: 20px;" :span="5" v-for="(item, inde) in goods" :key="inde"
+                v-if="(index-1)*4 <= inde && inde < index*4" :offset="inde%4==0?0:1">
+                <el-card :body-style="{ padding: '0px' }">
+                    <el-image :src="'img/'+item.image"></el-image>
+                    <div style="padding: 14px;">
+                        <span>{{item.name}}</span>
+                        <div class="bottom clearfix">
+                            <time class="time">{{ item.price }}</time>
+                            <el-button type="text" class="button">加入购物车</el-button>
+                        </div>
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
+        <div style="text-align: center;">
+            <el-pagination background @current-change="page()" :current-page.sync="pageNum" layout="prev, pager, next" :page-size="8" :total="total">
+            </el-pagination>
+            <p style="margin-top: 8px;padding-bottom: 3px;">Copyright © 午夜伤心男孩</p>
+        </div>
+    </div>
+</body>
+<script src="js/goods.js"></script>
+
+</html>

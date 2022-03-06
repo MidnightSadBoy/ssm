@@ -1,0 +1,76 @@
+package com.hssj.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.hssj.pojo.Goods;
+import com.hssj.pojo.Link;
+import com.hssj.pojo.ResultInfo;
+import com.hssj.service.GoodsService;
+
+@RestController
+@RequestMapping("/goods")
+public class GoodsController {
+
+	@Autowired
+	private GoodsService goodsService;
+
+	@RequestMapping("first")
+	public ResultInfo first() {
+		PageHelper.startPage(1, 8);
+		ResultInfo resultInfo = new ResultInfo();
+		List<Goods> findAllGoods = goodsService.findAllGoods();
+		resultInfo.setFlag(true);
+		resultInfo.setData(findAllGoods);
+		PageInfo<Goods> info = new PageInfo<Goods>(findAllGoods);
+		resultInfo.setPage(info);
+		return resultInfo;
+	}
+
+	@RequestMapping("findPage")
+	public ResultInfo findPage(int pageNum, int[] links) {
+		ArrayList<Link> list = new ArrayList<Link>();
+		List<Goods> findAllGoods;
+		PageHelper.startPage(pageNum, 8);
+		for (int string : links) {
+			list.add(new Link(string, null, 0, 0));
+		}
+		ResultInfo resultInfo = new ResultInfo();
+		if (links == null || links.length == 0) {
+			findAllGoods = goodsService.findAllGoods();
+		} else {
+			findAllGoods = goodsService.findGoodsbyLink(list);
+		}
+		resultInfo.setFlag(true);
+		resultInfo.setData(findAllGoods);
+		PageInfo<Goods> info = new PageInfo<Goods>(findAllGoods);
+		info.setTotal(findAllGoods.size());
+		resultInfo.setPage(info);
+		return resultInfo;
+	}
+
+	@RequestMapping("cal")
+	public ResultInfo cal() {
+		ResultInfo resultInfo = new ResultInfo();
+		List<Goods> findCalShow = goodsService.findCalShow();
+		resultInfo.setFlag(true);
+		resultInfo.setData(findCalShow);
+		return resultInfo;
+	}
+
+	@RequestMapping("index")
+	public ResultInfo index() {
+		ResultInfo resultInfo = new ResultInfo();
+		List<Goods> findCalShow = goodsService.findIndexGoods();
+		resultInfo.setFlag(true);
+		resultInfo.setData(findCalShow);
+		return resultInfo;
+	}
+
+}

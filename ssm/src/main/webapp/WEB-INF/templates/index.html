@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/1.css">
+	<script src="js/vue.js"></script>
+	<!-- 引入样式 -->
+	<link rel="stylesheet" href="css/index.css">
+	<!-- 引入组件库 -->
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+</head>
+
+<body class="rainbow">
+	<div id="app" class="background">
+		<!-- 标头 -->
+		<el-menu :default-active="activeIndex" class="el-menu-demo" text-color="#000" mode="horizontal"
+			@select="handleSelect">
+			<el-menu-item index="1" style="font-size: large;">亨盛世家</el-menu-item>
+			<el-menu-item index="2" v-html="username"></el-menu-item>
+			<el-menu-item index="3" v-if="!isLogin"><a href="toRegister">没有账号？请注册</a></el-menu-item>
+			<el-menu-item index="4" disabled>消息中心</el-menu-item>
+			<el-menu-item index="5" disabled>订单管理</el-menu-item>
+		</el-menu>
+		<!-- 标签和图片滚动 -->
+		<el-row class="tac">
+			<el-col class="tacc" :span="4">
+				<el-menu class="el-menu-vertical-demo" @select="choice">
+					<el-menu-item :index="(index+1).toString()" v-for="(item, index) in category" :key="index" style="text-align: center;">
+						<span slot="title" style="color: black;">{{item.cname}}</span>
+					</el-menu-item>
+				</el-menu>
+			</el-col>
+			<el-col :span="19">
+				<div class="block">
+					<el-carousel height="370px" :interval="4000" type="card">
+						<el-carousel-item v-for="(item,index) in goodscal" :key="index">
+							<h4 class="small" style="text-align: center;"> {{item.name}} </h4>
+							<el-image style="width:100%; height: 380px;" :src="'img/'+item.image" fit="cover">
+							</el-image>
+						</el-carousel-item>
+					</el-carousel>
+				</div>
+			</el-col>
+		</el-row>
+		<!-- 商品展示卡片 -->
+		<el-row style="padding-left: 4%;" v-for="index in 4" :key="index">
+			<el-col style="margin-bottom: 20px;" :span="5" v-for="(item, inde) in goodsindex"  v-if="(index-1)*4 <= inde && inde < index*4" :key="inde"
+				:offset="inde%4==0?0:1">
+				<el-card :body-style="{ padding: '0px' }">
+					<el-image :src="'img/'+item.image"></el-image>
+					<div style="padding: 14px;">
+						<span>{{item.name}}</span>
+						<div class="bottom clearfix">
+							<time class="time">{{ item.price }}</time>
+							<el-button type="text" class="button">加入购物车</el-button>
+						</div>
+					</div>
+				</el-card>
+			</el-col>
+		</el-row>
+	</div>
+</body>
+<script src="js/1.js"></script>
+
+</html>

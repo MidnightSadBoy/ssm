@@ -1,0 +1,8 @@
+INDEX VERSION 1.4+D:\word\SSM\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+1679868704.index
+3271193799.index
+257412509.index
+2717904372.index
+3241774815.index
+4004278171.index
+4056072502.index

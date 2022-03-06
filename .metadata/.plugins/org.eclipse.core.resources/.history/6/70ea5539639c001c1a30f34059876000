@@ -1,0 +1,29 @@
+package test;
+
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:applicationContext.xml")
+public class Test1 {
+
+	public static void test() {
+		String b = null;
+		System.out.println("--------------");
+		System.out.println(b);
+		tt();
+	}
+
+	public static void tt() {
+		Test1 test1 = new Test1();
+		test1.test();
+		System.out.println("this is tt!");
+	}
+
+	public static void main(String[] args) {
+		Test1 test1 = new Test1();
+		test1.test();
+		System.out.println("ok!");
+	}
+}

@@ -1,0 +1,23 @@
+package com.hssj.service;
+
+import java.util.List;
+
+import com.hssj.pojo.Goods;
+import com.hssj.pojo.Link;
+
+public interface GoodsService {
+
+	// 查询全部
+	public List<Goods> findAllGoods();
+
+	// 展示轮播图商品
+	public List<Goods> findCalShow();
+
+	// 展示主页商品
+	public List<Goods> findIndexGoods();
+
+	/**
+	 * 根据条件筛选
+	 */
+	List<Goods> findGoodsbyLink(List<Link> links);
+}

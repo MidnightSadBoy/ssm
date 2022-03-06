@@ -1,0 +1,43 @@
+* {
+    margin : 0;
+    padding: 0;
+}
+
+.rainbow {
+    background           : linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-repeat    : no-repeat;
+    background-size      : 400% 400%;
+    animation            : move 10s ease infinite;
+    background-attachment: fixed;
+}
+
+.background {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+@keyframes move {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.tac {
+    padding: 4%;
+}
+
+.tacc {
+    margin-right: 4%;
+}
+
+a {
+    color          : black;
+    text-decoration: none;
+}

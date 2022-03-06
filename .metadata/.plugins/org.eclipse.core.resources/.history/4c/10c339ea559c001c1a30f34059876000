@@ -1,0 +1,5 @@
+package com.hssj.interceptor;
+
+public class LoginIntercepetor {
+
+}

@@ -1,0 +1,10 @@
+computeSourcePath=true
+configMode=serverFile
+contextsDir=D\:\\Environments\\apache-tomcat-8.5.70\\conf\\Catalina\\localhost
+eclipse.preferences.version=1
+managerUrl=http\://localhost\:8080/manager
+tomcatBase=D\:\\Environments\\apache-tomcat-8.5.70
+tomcatConfigFile=D\:\\Environments\\apache-tomcat-8.5.70\\conf\\server.xml
+tomcatDir=D\:\\Environments\\apache-tomcat-8.5.70
+tomcatJRE=1643875499756
+tomcatVersion=tomcatV8

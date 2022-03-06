@@ -1,0 +1,270 @@
+package com.xyz.hssj.web.servlet;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Random;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.beanutils.BeanUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xyz.hssj.domain.ResultInfo;
+import com.xyz.hssj.domain.User;
+import com.xyz.hssj.service.UserService;
+import com.xyz.hssj.service.impl.UserServiceImpl;
+
+/**
+ * Servlet implementation class UserServlet
+ */
+@WebServlet("/user/*")
+public class UserServlet extends BaseServlet {
+	private static final long serialVersionUID = 1L;
+	private UserService userService = new UserServiceImpl();
+	private ObjectMapper mapper = new ObjectMapper();
+
+	/**
+	 * 用户激活
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void activeUser(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// 获取激活码
+		String code = request.getParameter("code");
+		if (code != null) {
+			// 激活并返回判断
+			boolean flag = userService.active(code);
+			String msg = null;
+			if (flag) {
+				msg = "激活成功，请<a href='login.html'>登录</a>";
+			} else {
+				msg = "激活失败，请联系管理员";
+			}
+			response.getWriter().write(msg);
+		}
+	}
+
+	/**
+	 * 验证码
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void checkCode(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		int width = 100;
+		int height = 50;
+
+		BufferedImage imge = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics g = imge.getGraphics();
+		Random random = new Random();
+		// 填充背景色
+		Color color1 = new Color(255, 255, 224);
+		Color color2 = new Color(135, 206, 250);
+		ArrayList<Color> colors = new ArrayList<Color>();
+		colors.add(color1);
+		colors.add(color2);
+		int colori = random.nextInt(colors.size());
+		g.setColor(colors.get(colori));
+		g.fillRect(0, 0, width, height);
+
+		// 填写验证码
+		String str = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890";
+		StringBuilder code = new StringBuilder();
+		Color color3 = new Color(138, 132, 70);
+		Color color4 = new Color(43, 88, 143);
+		Color color5 = new Color(155, 118, 85);
+		ArrayList<Color> colorss = new ArrayList<Color>();
+		colorss.add(color3);
+		colorss.add(color4);
+		colorss.add(color5);
+		int colorj = random.nextInt(colorss.size());
+		g.setColor(colorss.get(colorj));
+		g.setFont(new Font("", Font.BOLD, 18));
+		for (int i = 0; i < 4; i++) {
+			int r_width = random.nextInt(18);
+			int nextInt = random.nextInt(str.length());
+			String charAt = String.valueOf(str.charAt(nextInt));
+			code.append(charAt);
+			g.drawString(charAt, r_width + i * 25, 20 + r_width);
+		}
+
+		// 将验证码存入session
+		String checkcodeString = code.toString();
+		request.getSession().setAttribute("checkcode_session", checkcodeString);
+
+		// 画干扰线
+		for (int i = 0; i < 4; i++) {
+			int x1 = random.nextInt(width);
+			int y1 = random.nextInt(height);
+			int x2 = random.nextInt(width);
+			int y2 = random.nextInt(height);
+
+			g.drawLine(x1, y1, x2, y2);
+		}
+		ImageIO.write(imge, "jpg", response.getOutputStream());
+	}
+
+	/**
+	 * 退出登录
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void exit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getSession().removeAttribute("user");
+		response.sendRedirect(request.getContextPath() + "/index.html");
+	}
+
+	/**
+	 * 登录状态查找用户名
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void findUsername(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		User user = null;
+		user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			response.getWriter().append(
+					"欢迎回来，" + user.getUsername() + "<a href=\"user/exit\" style=\"color: red;\">&nbsp;退出登录</a>");
+		} else {
+			response.getWriter().append("您好请<a href=\"login.html\">登录</a>");
+		}
+	}
+
+	/**
+	 * 登录
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 获取数据
+		Map<String, String[]> parameterMap = request.getParameterMap();
+		String code = request.getParameter("checkcode");
+		// 1.1验证码校验
+
+		HttpSession session = request.getSession();
+		String checkcode = (String) session.getAttribute("checkcode_session");
+		session.removeAttribute("checkcode_session");// 保证验证码只能使用一次
+
+		// 比较
+		if (checkcode == null || !checkcode.equalsIgnoreCase(code)) {
+			// 验证码错误
+			ResultInfo info = new ResultInfo();
+			info.setFlag(false);
+			info.setErrorMsg("验证码输入错误，登录失败！");
+			mapper.writeValue(response.getWriter(), info);
+			return;
+		}
+
+		// 封装数据
+		User user = new User();
+		try {
+			BeanUtils.populate(user, parameterMap);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
+		User u = userService.login(user);
+		ResultInfo resultInfo = new ResultInfo();
+		// 判断返回数据
+		if (u == null) {
+			// 登录失败，用户名不存在
+			resultInfo.setFlag(false);
+			resultInfo.setErrorMsg("您输入的密码错误");
+		}
+		if (u != null && !"Y".equals(u.getStatus())) {
+			// 登录失败，用户未被激活
+			resultInfo.setFlag(false);
+			resultInfo.setErrorMsg("用户未被激活,请前往激活");
+		}
+		if (u != null && "Y".equals(u.getStatus())) {
+			// 登录成功
+			resultInfo.setFlag(true);
+			request.getSession().setAttribute("user", u);
+		}
+
+		// 响应json数据
+		mapper.writeValue(response.getOutputStream(), resultInfo);
+	}
+
+	/**
+	 * 注册
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void register(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// 1获取前端数据
+		String code = request.getParameter("checkcode");
+		Map<String, String[]> map = request.getParameterMap();
+
+		// 1.1验证码校验
+
+		HttpSession session = request.getSession();
+		String checkcode = (String) session.getAttribute("checkcode_session");
+		session.removeAttribute("checkcode_session");// 保证验证码只能使用一次
+
+		// 比较
+		if (checkcode == null || !checkcode.equalsIgnoreCase(code)) {
+			// 验证码错误
+			ResultInfo info = new ResultInfo();
+			info.setFlag(false);
+			info.setErrorMsg("验证码输入错误，注册失败！");
+			mapper.writeValue(response.getWriter(), info);
+			return;
+		}
+		// 2封装对象
+		User user = new User();
+		try {
+			BeanUtils.populate(user, map);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		// 3调用service完成注册
+		boolean flag = userService.register(user);
+		ResultInfo info = new ResultInfo();
+		if (flag) {
+			info.setFlag(true);// 注册成功
+		} else {
+			info.setFlag(false);
+			info.setErrorMsg("该用户名已存在，注册失败！");
+		}
+		// 4返回响应结果
+		mapper.writeValue(response.getWriter(), info);
+	}
+
+}

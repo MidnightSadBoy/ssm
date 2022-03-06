@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hssj.mapper.GoodsMapper">
+	<select id="findByPage" resultType="com.hssj.pojo.Goods">
+		select * from tab_goods
+	</select>
+
+	<resultMap type="com.hssj.pojo.Goods" id="goodsmap">
+		<id property="gid" column="gid" />
+		<result property="image" column="image" />
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		<collection property="links" ofType="com.hssj.pojo.Link">
+			<id property="lid" column="lid" />
+			<result property="lname" column="lname" />
+			<result property="lrow" column="lrow" />
+			<result property="cid_link" column="cid_link" />
+		</collection>
+	</resultMap>
+
+	<select id="findByLink" resultMap="goodsmap"
+		parameterType="com.hssj.pojo.Link">
+		SELECT * from tab_goods g, tab_goods_links gl, tab_link l
+		WHERE g.gid =
+		gl.gid AND gl.lid = l.lid
+		<if test="lid != null">
+			AND l.lid = #{lid}
+		</if>
+	</select>
+
+	<select id="findByGoodsAndLink" resultMap="goodsmap">
+		SELECT * from tab_goods g, tab_goods_links gl, tab_link l
+		WHERE g.gid = gl.gid AND gl.lid = l.lid
+		<if test="goods != null">
+			<foreach collection="goods" open="AND g.gid in ("
+				separator="," close=")" index="index" item="item">
+				#{item.gid}
+			</foreach>
+		</if>
+		<if test="link != null">
+			AND l.lid = #{link.lid}
+		</if>
+	</select>
+
+	<select id="findByGoodsAndLink" resultType="Goods">
+		select * from tab_goods where gid = #{gid}
+	</select>
+
+</mapper>

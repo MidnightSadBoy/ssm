@@ -1,0 +1,33 @@
+new Vue({
+    el: '#app',
+    data: {
+        activeIndex: '1',
+        activeIndex2: '1',
+        currentDate: new Date(),
+        index: 1,
+    },
+    methods: {
+        handleSelect(key, keyPath) {
+            this.open1();
+            console.log(key, keyPath);
+        },
+        open1() {
+            this.$message({
+                message: '恭喜你，这是一条成功消息',
+                type: 'success'
+            });
+        },
+        open2() {
+            this.$message.error('错了哦，这是一条错误消息');
+        },
+
+    }, mounted() {
+        axios.get('http://localhost:8080/ssm/category/findAll')
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    },
+})

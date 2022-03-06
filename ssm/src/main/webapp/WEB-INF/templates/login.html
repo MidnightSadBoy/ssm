@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>login</title>
+    <link rel="stylesheet" href="css/login.css">
+    <script src="js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 引入组件库 -->
+    <script src="js/index.js"></script>
+    <script src="js/axios.min.js"></script>
+</head>
+
+<body class="rainbow">
+    <div id="app" class="background">
+        <el-menu class="el-menu-demo" text-color="#000" mode="horizontal" @select="handleSelect">
+            <el-menu-item style="font-size: large;">亨盛世家</el-menu-item>
+        </el-menu>
+        <el-container>
+            <el-aside width="30%" :style="'background-color: orange;height: '+h+'px'+';'">
+                <div style="margin-left: 20px;margin-top: 2%;font-size: large;margin-bottom: -3%;"> 登录页面 </div>
+                <div style="text-align: center;font-size: 36px;">
+                    <h1 style="margin-top: 45%;">
+                        亨<br>盛<br>世<br>家
+                    </h1>
+                </div>
+            </el-aside>
+            <el-container>
+                <el-main>
+                    <div style="margin-top: 100px;margin-left: 20%;">
+                        <div style="height: 100px;">
+                            <p>用户名：</p>
+                            <el-input style="width: 50%;float: left;" placeholder="请输入用户名" v-model="username"
+                                :change="checkUsername()" clearable></el-input>
+                            <p style="margin-left: 358px;" v-text="us"></p>
+                        </div>
+                        <div style="height: 100px;">
+                            <p>密码：</p>
+                            <el-input style="width: 50%;float: left;" placeholder="请输入密码" v-model="password"
+                                :change="checkPassword()" show-password>
+                            </el-input>
+                            <p style="margin-left: 358px;" v-text="ps"></p>
+                        </div>
+                        <div style="height: 100px;">
+                            <p>验证码：</p>
+                            <el-input style="width: 50%;float: left;" placeholder="请输入验证码" v-model="checkcode"
+                                clearable></el-input>
+                            </el-input>
+                            <a @click="refreshCode()"><img id="imgcode" style="margin-left: 15px;" :src="imgcode"></a>
+                            看不清楚？<a style="color:orange;text-decoration: none;" @click="refreshCode()">换一张</a>
+                        </div>
+                        <el-button type="primary" @click="loginSubmit()">登录</el-button>
+                    </div>
+                </el-main>
+                <el-footer>
+                    <div style="margin-top: 32px;float: left;">
+                        <p>Copyright © 午夜伤心男孩</p>
+                    </div>
+                    <div style="margin-top: 32px;margin-left: 82%;">
+                        没有账号?进行<a style="color:orange;text-decoration: none;" href="toRegister">注册</a>
+                    </div>
+                </el-footer>
+            </el-container>
+
+        </el-container>
+    </div>
+</body>
+<script src="js/login.js"></script>
+
+</html>

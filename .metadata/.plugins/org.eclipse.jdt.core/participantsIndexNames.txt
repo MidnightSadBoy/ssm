@@ -1,0 +1,5 @@
+INDEX VERSION 1.131
+D:\word\SSM\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1143344243.index
+\test\src\main\resources
+D:\word\SSM\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\4255624101.index
+\ssm\src\main\resources

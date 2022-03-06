@@ -1,0 +1,13 @@
+package com.hssj.controller;
+
+public class TestDemo {
+
+	public static void main(String args[]) {
+		Demo1 R1 = new Demo1("Thread-1");
+		R1.start();
+
+		Demo1 R2 = new Demo1("Thread-2");
+		R2.start();
+	}
+
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="selection" value="login"/>
+		<item key="wrap" value="true"/>
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="false"/>
+		<item key="incremental" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<list key="findhistory">
+			<item value="login"/>
+			<item value="Dialect"/>
+			<item value="helperDialect"/>
+			<item value="CharacterEncodingFilter"/>
+			<item value="application/json;charset="/>
+			<item value="application/json;charset=utf-8"/>
+			<item value="parameterMap"/>
+			<item value="span_name"/>
+			<item value="spring-web"/>
+			<item value="spring-"/>
+			<item value="spring"/>
+			<item value="&#x09;"/>
+			<item value="commit"/>
+			<item value="username"/>
+			<item value="druid"/>
+		</list>
+		<list key="replacehistory">
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="1107"/>
+		<item key="DIALOG_Y_ORIGIN" value="341"/>
+		<item key="DIALOG_WIDTH" value="405"/>
+		<item key="DIALOG_HEIGHT" value="511"/>
+		<item key="DIALOG_FONT_NAME" value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI"/>
+	</section>
+	<section name="org.eclipse.wst.xml.ui.internal.preferences.XMLTemplatePreferencePage$XMLEditTemplateDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="695"/>
+		<item key="DIALOG_Y_ORIGIN" value="214"/>
+		<item key="DIALOG_WIDTH" value="919"/>
+		<item key="DIALOG_HEIGHT" value="491"/>
+		<item key="DIALOG_FONT_NAME" value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI"/>
+	</section>
+	<section name="org.eclipse.wst.html.ui.internal.preferences.ui.HTMLTemplatePreferencePage$HTMLEditTemplateDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="512"/>
+		<item key="DIALOG_Y_ORIGIN" value="114"/>
+		<item key="DIALOG_WIDTH" value="919"/>
+		<item key="DIALOG_HEIGHT" value="611"/>
+		<item key="DIALOG_FONT_NAME" value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="615"/>
+		<item key="DIALOG_Y_ORIGIN" value="332"/>
+	</section>
+</section>

@@ -1,0 +1,82 @@
+package com.xyz.hssj.web.servlet;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.xyz.hssj.dao.CategoryDao;
+import com.xyz.hssj.dao.impl.CategoryDaoImpl;
+import com.xyz.hssj.domain.Category;
+import com.xyz.hssj.util.JedisUtils;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Tuple;
+
+/**
+ * Servlet implementation class BaseServlet
+ */
+public class BaseServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private CategoryDao categoryDao = new CategoryDaoImpl();
+
+	/**
+	 * 加载资源
+	 */
+	@Override
+	public void init() throws ServletException {
+		// 1获取redis客户端
+		Jedis jedis = JedisUtils.getJedis();
+		// 2使用sortedset查询
+		Set<Tuple> categorySet = jedis.zrangeWithScores("category", 0, -1);
+		List<Category> cs = categoryDao.findAll();
+//		for (Tuple name : categorySet) {
+//			name.getElement();
+//			(int)name.getScore();
+//		}
+		Iterator<Tuple> it = categorySet.iterator();
+		if (categorySet.size() != cs.size()) {
+			jedis.del("category");
+		} else {
+			for (int i = 0; i < cs.size() && it.hasNext(); i++) {
+				String element = it.next().getElement();
+				if (!cs.get(i).getCname().equals(element)) {
+					jedis.del("category");
+					break;
+				}
+			}
+		}
+
+	}
+
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 获取uri
+		String uri = req.getRequestURI();
+		String methodName = uri.substring(uri.lastIndexOf('/') + 1);
+		// 获取方法对象
+		try {
+			Method method = this.getClass().getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
+			method.invoke(this, req, resp);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

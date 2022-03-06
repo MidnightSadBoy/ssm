@@ -1,0 +1,4 @@
+#Tomcat publish data
+#Sat Mar 05 16:29:26 CST 2022
+org.eclipse.jst.jee.server\:/binary\:D\:\\Environments\\apache-maven-3.8.3\\repository\\org\\springframework\\spring-web\\5.0.5.RELEASE\\spring-web-5.0.5.RELEASE.jar=D\:\\Environments\\apache-tomcat-8.5.70\\webapps\\ssm\\WEB-INF\\lib\\spring-web-5.0.5.RELEASE.jar
+org.eclipse.jst.jee.server\:ssm=D\:\\Environments\\apache-tomcat-8.5.70\\webapps\\ssm
